@@ -147,78 +147,105 @@ Note this is made available for demonstration purposes and is not representative
     ./bin/kc.sh start --https-certificate-file=./rhbksrvr.consulting.redhat.com.crt --https-certificate-key-file=./rhbksrvr.consulting.redhat.com.key --https-trust-store-file=./trusts.jks --https-trust-store-password=JBossRocks#123 --https-trust-store-type=jks --hostname=0.0.0.0 --hostname-debug=true --https-client-auth=request --verbose
     ```
 
-9.  Once RHBK is up and running, open https://0.0.0.0:8443 in the browser of your choice.
+9.  Once RHBK is up and running, open https://0.0.0.0:8443 in the browser of your choice. You've not setup your browser to trust this CA, so simply select proceed anyways:
 
-Open brower to 
-Confirm the invalid cert is in fact:
-    Common Name (CN)	rhbksrvr.consulting.redhat.com
-    Organization (O)	RED HAT
-    Organizational Unit (OU)	CONSULTING
-Create an admin user
-    admin
-    password123
+    ![Chrome Certificate Warning](./images/chrome-warning.png)
 
+10. Examine the certificate in your browser and confirm it's the one we supplied on the command line:
 
+    ![Chrome Server Certificate](./images/server-cert.png)
 
-Select dropdown top left to `Create realm`
+11. Create an administrative user of your choice. In my case I used `admin` and click `Create user`:
 
-Name realm `test`, then `Create`
+    ![Create Admin User](./images/create-admin.png)
 
-Go to Authentication
+12. It should confirm the user was created. Now click `Open Administration Console`:
 
-Duplicate browser, name x509-browser-flow
+    ![Open Admin Console](./images/open-admin.png)
 
-Add a step `X509/Validate Username Form`. Then shift it to below `Identity Provider Redirector`
+13. Now supply your newly created admin credentials and click `Sign In`:
 
-Modify `X509/Validate Username Form`. Set `Alias` to `test`. Alter the `A regular expression to extract user idenity` field to `CN=(.*?)(?:,|$)`
-
-On `Action` menu dropdown, select `Bind flow`. Select `Browser flow` and click `Save`
-
-Go to Users
-
-Hit `Add user`, add `user1.consulting.redhat.com`. Click `Create`
-
-`Credentails` tab > `Set password`.
-
-Enter a password and confirm. Uncheck `Temporary` and then `Save`, then `Save password`.
-
-https://0.0.0.0:8443/realms/test/account/#/
+    ![Log In Admin Console](./images/login-admin.png)
 
 
-reset; openssl s_user1 -connect 0.0.0.0:8443
+14. Now from the dropdown menu on the topright, click `Create realm`:
 
-This shows consulting isn't in my requests./.. ugh
+    ![Create realm](./images/create-realm.png)
 
-./bin/kc.sh start --https-certificate-file=./rhbksrvr.consulting.redhat.com.crt --https-certificate-key-file=./rhbksrvr.consulting.redhat.com.key --hostname=sso.server.lab --https-trust-store-file=./trusts.jks --https-trust-store-password=JBossRocks#123 --https-trust-store-type=jks --hostname=0.0.0.0 --hostname-debug=true --https-user1-auth=request
+15. Name the new realm `x509-test`, click `Create`:
 
-
-===============================
-
-cp ~/Downloads/rhbk-24.0.5.zip .
-
-unzip rhbk-24.0.5.zip
-
-cd ./rhbk-24.0.5
-
-cp ../CA/trusts.jks .
-cp ../CA/rhbksrvr.consulting.redhat.com.crt .
-cp ../CA/rhbksrvr.consulting.redhat.com.key .
+    ![Create realm](./images/realm.png)
 
 
-./bin/kc.sh start-dev --https-certificate-file=./rhbksrvr.consulting.redhat.com.crt --https-certificate-key-file=./rhbksrvr.consulting.redhat.com.key --hostname=sso.server.lab --config-keystore=./trusts.jks --config-keystore-password JBossRocks#123 --hostname=0.0.0.0 --hostname-debug=true
+16. Go to Authentication on the left hand side menu:
 
+    ![Authenication](./images/auth.png)
 
-start-dev
+17. Select the `brower` and in the vertical menu, select `Duplicate`:
 
-./bin/kc.sh start --https-certificate-file=./rhbksrvr.consulting.redhat.com.crt --https-certificate-key-file=./rhbksrvr.consulting.redhat.com.key --hostname=sso.server.lab --config-keystore=./trusts.jks --config-keystore-password JBossRocks#123 --hostname=0.0.0.0 --hostname-debug=true
-```
+    ![Duplicate Flow](./images/dupe1.png)
 
-Open brower to https://0.0.0.0:8443
-Confirm the invalid cert is in fact:
-    Common Name (CN)	rhbksrvr.consulting.redhat.com
-    Organization (O)	RED HAT
-    Organizational Unit (OU)	CONSULTING
-Create an admin user
-    admin
-    password123
+18. Name it `x509-browser-flow` and click `Duplicate`:
 
+    ![Duplicate Flow](./images/dupe2.png)
+
+19. To the newly created `x509-browser-flow ` click `Add step`:
+
+    ![Add Step](./images/add-step1.png)
+
+20. Add a `X509/Validate Username Form` step and click `Add`
+
+    ![Add Step](./images/add-step2.png)
+
+21. Shift `X509/Validate Username Form` step to below `Identity Provider Redirector` and set the Requirement field to `Alternative`
+
+    ![Shift Step](./images/shift-step.png)
+
+22. Click the gear icon next to the `X509/Validate Username Form` step:
+
+    ![Gear](./images/gear.png)
+
+23. In the config popup set `Alias` to `x509-step`. Alter the `A regular expression to extract user idenity` field to `CN=(.*?)(?:,|$)`. Set the `User mapping method` to `Username or Email` and clear out the `A name of user attribute` field. Lastly click `Save`. This will examine the certificate presented by the client and will lookup a user based on the commonname, CN, field of the certificate:
+
+    ![Step Config](./images/config.png)
+
+24. Now click the `Action` menu in the top right and select `Bind Flow`:
+
+    ![Action Menu](./images/actions.png)
+
+25. Choose `Browser flow` and click `Save`:
+
+    ![Bind Flow](./images/bind.png)
+
+24. Go to Users:
+
+    ![Users](./images/users.png)
+
+25. Click `Create new user`
+
+    ![Create New User](./images/create-new-user1.png)
+
+26. Set the `Username` to the CN we created for our client user, in this case `user1.consulting.redhat.com` and click `Create`:
+
+    ![Create New User](./images/create-new-user2.png)
+
+27. Now in a new private window in the brower you added the client certificate to, navigate to https://0.0.0.0:8443/realms/x509-test/account/#/. It should now prompt you for the client certificate, which you should elect to provide:
+
+    ![Chrome Cert Prompt](./images/cert-prompt.png)
+
+28. RHBK should now ask if you want to continue to login via certificate as that user. Click `Continue`
+
+    ![RHBK Confirm User Cert](./images/confirm-user-cert.png) 
+
+29. It will now ask you to supply some basic user information for the account. Please supply it and click `Submit`:
+
+    ![Update Account Information](./images/user-info.png) 
+
+30. You should now be successfully logged in as `user1.consulting.redhat.com` to the `x509-test` realm of RHBK!
+
+    ![Success](./images/success.png)
+
+## Resources
+
+*   [Red Hat Solutions: How to configure X.509 client certificate based user authentication in RHBK Operator ?](https://access.redhat.com/solutions/7057715)
+*   [Red Hat build of Keycloak Documentation: Confguring X.509 Client Certificate Authentication](https://docs.redhat.com/en/documentation/red_hat_build_of_keycloak/22.0/html/server_administration_guide/configuring-authentication_server_administration_guide#creating_a_password_less_browser_login_flow)
