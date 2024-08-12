@@ -1,4 +1,4 @@
-# Configuring X.509 user1 Certificate Based User Authentication in Red Hat Build of Keycloak with a Customer Trust Heirarchy [RHBK]
+# Configuring X.509 Client Certificate Based User Authentication in Red Hat Build of Keycloak with a Customer Trust Heirarchy [RHBK]
 
 > [!NOTE]
 > If you found this repo helpful or you found a bug, please feel free to submit a PR, drop me an email kfrankli@redhat.com, or even just star the repo. I welcome any and all feedback. 
@@ -251,3 +251,4 @@ Thank you to [GitHub chelliot-rh](https://github.com/chelliot-rh) for this kindl
 
 *   [Red Hat Solutions: How to configure X.509 client certificate based user authentication in RHBK Operator ?](https://access.redhat.com/solutions/7057715)
 *   [Red Hat build of Keycloak Documentation: Confguring X.509 Client Certificate Authentication](https://docs.redhat.com/en/documentation/red_hat_build_of_keycloak/22.0/html/server_administration_guide/configuring-authentication_server_administration_guide#creating_a_password_less_browser_login_flow)
+*   [Upstream Keycloak Documentation: Enable TLS](https://www.keycloak.org/server/enabletls)
