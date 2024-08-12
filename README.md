@@ -9,6 +9,8 @@ This repository outlines the steps needed to configure X.509 certificate based u
 
 Note this is made available for demonstration purposes and is not representative of a production ready configuration. Further steps would be required.
 
+Thank you to [GitHub chelliot-rh](https://github.com/chelliot-rh) for this kindly assistance with creating and testing this solution.
+
 ## Instructions
 
 ### Creating our X509 Heirarchy
