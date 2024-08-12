@@ -5,7 +5,7 @@
 
 ## Overview
 
-This repository outlines the steps needed to configure X.509 certificate based user authentication. It includes not only the steps needed to configure RHBK (Red Hat build of Keycloak), but also how to create a simple certificate trust heirarchy to test this.
+This repository outlines the steps needed to configure X.509 certificate based user authentication. This is useful in such circumstances as clients wishing to use a HSPD-12 compliant PIV, CAC, or other similar "smart" card that uses client certificates to provide attestation. It includes not only the steps needed to configure RHBK (Red Hat build of Keycloak), but also how to create a simple certificate trust heirarchy to test this.
 
 Note this is made available for demonstration purposes and is not representative of a production ready configuration. Further steps would be required.
 
